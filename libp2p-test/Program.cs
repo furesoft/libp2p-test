@@ -15,7 +15,7 @@ internal partial class Program
         Regex omittedLogs = MyRegex();
 
         var services = new ServiceCollection()
-            .AddLibp2p(builder => builder.WithPubsub().WithQuic().WithRelay())
+            .AddLibp2p(builder => builder.WithPubsub().WithQuic())
             .AddLogging(builder =>
             {
                 builder.SetMinimumLevel(LogLevel.Information)
