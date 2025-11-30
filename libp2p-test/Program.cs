@@ -34,6 +34,7 @@ internal partial class Program
 
         while (true)
         {
+            Console.Write($"{nickName}> ");
             var msg = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(msg))
