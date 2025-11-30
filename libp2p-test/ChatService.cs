@@ -61,61 +61,58 @@ public class ChatService
 
     private void UpdateConnectedPeers()
     {
-        if (_pubsubRouter != null)
+        if (_pubsubRouter == null) return;
+        // Get connected peers from the current sessions in the router
+        var connectedPeerIds = new List<PeerId>();
+
+        try
         {
-            // Get connected peers from the current sessions in the router
-            var connectedPeerIds = new List<PeerId>();
-
-            try
+            // Get peers from direct connections
+            // The router doesn't expose a direct way to get peers subscribed to a topic,
+            // so we'll track the peers we see connected via the network
+            if (_pubsubRouter is IRoutingStateContainer routerState)
             {
-                // Get peers from direct connections
-                // The router doesn't expose a direct way to get peers subscribed to a topic,
-                // so we'll track the peers we see connected via the network
-                var routerState = _pubsubRouter as IRoutingStateContainer;
-                if (routerState != null)
+                // Try to get peers from the router's internal state
+                foreach (var peerId in routerState.ConnectedPeers)
                 {
-                    // Try to get peers from the router's internal state
-                    foreach (var peerId in routerState.ConnectedPeers)
-                    {
-                        connectedPeerIds.Add(peerId);
-                    }
+                    connectedPeerIds.Add(peerId);
                 }
             }
-            catch (Exception ex)
-            {
-                AddLog($"Error getting peers: {ex.Message}");
-            }
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Error getting peers: {ex.Message}");
+        }
 
-            // Update connected peers dictionary
-            foreach (var peerId in connectedPeerIds)
+        // Update connected peers dictionary
+        foreach (var peerId in connectedPeerIds)
+        {
+            string peerIdStr = peerId.ToString();
+            if (!_connectedPeers.ContainsKey(peerIdStr))
             {
-                string peerIdStr = peerId.ToString();
-                if (!_connectedPeers.ContainsKey(peerIdStr))
+                // This is a new peer
+                _connectedPeers[peerIdStr] = new ConnectedPeer
                 {
-                    // This is a new peer
-                    _connectedPeers[peerIdStr] = new ConnectedPeer
-                    {
-                        PeerId = peerIdStr,
-                        Address = "Connected via libp2p",
-                        ConnectedAt = DateTime.Now,
-                        UserAgent = "Libp2p peer"
-                    };
+                    PeerId = peerIdStr,
+                    Address = "Connected via libp2p",
+                    ConnectedAt = DateTime.Now,
+                    UserAgent = "Libp2p peer"
+                };
 
-                    AddLog($"New peer connected: {peerIdStr}");
-                }
+                AddLog($"New peer connected: {peerIdStr}");
             }
+        }
 
-            // Check for disconnected peers
-            var disconnectedPeers = _connectedPeers.Keys
-                .Where(key => !connectedPeerIds.Any(p => p.ToString() == key))
-                .ToList();
+        // Check for disconnected peers
+        var disconnectedPeers = _connectedPeers.Keys
+            .Where(key => !connectedPeerIds.Any(p => p.ToString() == key))
+            .ToList();
 
-            foreach (var peerId in disconnectedPeers)
+        foreach (var peerId in disconnectedPeers)
+        {
+            if (_connectedPeers.TryRemove(peerId, out var peer))
             {
-                if (_connectedPeers.TryRemove(peerId, out var peer))
-                {
-                    AddLog($"Peer disconnected: {peerId}");
-                }
+                AddLog($"Peer disconnected: {peerId}");
             }
         }
     }

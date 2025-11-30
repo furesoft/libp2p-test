@@ -5,22 +5,21 @@ using Nethermind.Libp2p;
 
 namespace libp2p_test;
 
-internal class Program
+internal partial class Program
 {
     private static async Task Main(string[] args)
     {
         Console.Write("Nickname: ");
         var nickName = Console.ReadLine();
 
-        Regex omittedLogs = new(".*(MDnsDiscoveryProtocol|IpTcpProtocol).*");
+        Regex omittedLogs = MyRegex();
 
         var services = new ServiceCollection()
-            .AddLibp2p(builder => builder.WithPubsub())
+            .AddLibp2p(builder => builder.WithPubsub().WithQuic().WithRelay())
             .AddLogging(builder =>
             {
-                builder.SetMinimumLevel(args.Contains("--trace") ? LogLevel.Trace : LogLevel.Information)
+                builder.SetMinimumLevel(LogLevel.Information)
                     .AddFilter((_, type, lvl) => !omittedLogs.IsMatch(type!));
-
 
                     builder.AddSimpleConsole(l =>
                     {
@@ -48,4 +47,7 @@ internal class Program
 
         chatService.Stop();
     }
+
+    [GeneratedRegex(".*(MDnsDiscoveryProtocol|IpTcpProtocol).*")]
+    private static partial Regex MyRegex();
 }

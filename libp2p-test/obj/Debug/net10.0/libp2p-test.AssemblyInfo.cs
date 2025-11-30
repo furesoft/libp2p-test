@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("libp2p-test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1c54e80c874bce8ab68456ebd0d0efcef4c8f88")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+397e8ccbbd4db374c869375310bb349eabd38a8c")]
 [assembly: System.Reflection.AssemblyProductAttribute("libp2p-test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("libp2p-test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
