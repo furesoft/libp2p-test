@@ -6,7 +6,7 @@
         <RootNamespace>libp2p_test</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
+        <PublishAot>false</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 

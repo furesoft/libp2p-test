@@ -80,3 +80,4 @@ D:\libp2p-test\libp2p-test\obj\Debug\net10.0\refint\libp2p-test.dll
 D:\libp2p-test\libp2p-test\obj\Debug\net10.0\libp2p-test.pdb
 D:\libp2p-test\libp2p-test\obj\Debug\net10.0\libp2p-test.genruntimeconfig.cache
 D:\libp2p-test\libp2p-test\obj\Debug\net10.0\ref\libp2p-test.dll
+D:\libp2p-test\libp2p-test\obj\Debug\net10.0\libp2p-test.sourcelink.json
